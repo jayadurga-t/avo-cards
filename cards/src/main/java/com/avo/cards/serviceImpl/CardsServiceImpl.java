@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 @Service
 @AllArgsConstructor
-public class CardsService implements ICardsService {
+public class CardsServiceImpl implements ICardsService {
 
     private CardsRepository cardsRepository;
 
@@ -57,7 +57,7 @@ public class CardsService implements ICardsService {
                     }
                 }
         );
-        return null;
+        return CardsMapper.mapToCardsDto(cards, new CardsDto());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CardsService implements ICardsService {
                 }
         );
 
-        cardsRepository.findById(cards.getCardId());
+        cardsRepository.deleteById(cards.getCardId());
         return true;
     }
 }

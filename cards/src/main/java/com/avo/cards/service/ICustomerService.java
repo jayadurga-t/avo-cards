@@ -4,6 +4,6 @@ import com.avo.cards.dto.CustomerDetailsDto;
 
 public interface ICustomerService {
 
-    CustomerDetailsDto fetchCustomerDetails(String mobileNumber);
+    CustomerDetailsDto fetchCustomerDetails(String correlationId, String mobileNumber);
 
 }

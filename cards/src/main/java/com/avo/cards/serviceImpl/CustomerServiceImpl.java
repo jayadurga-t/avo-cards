@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements ICustomerService {
     private ICardsService iCardsService;
 
     @Override
-    public CustomerDetailsDto fetchCustomerDetails(String mobileNumber) {
+    public CustomerDetailsDto fetchCustomerDetails(String correlationId, String mobileNumber) {
 
 //        ResponseEntity<CustomerDto> customerDtoResponseEntity =
 //                accountsFeignClient.fetchAccountDetails(mobileNumber);
@@ -52,9 +52,9 @@ public class CustomerServiceImpl implements ICustomerService {
 //        customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
 
         CustomerDetailsDto customerDetailsDto = CustomerMapper
-                .mapToCustomerDetailsDto(accountsFeignClient.fetchAccountDetails(mobileNumber).getBody(), new CustomerDetailsDto());
+                .mapToCustomerDetailsDto(accountsFeignClient.fetchAccountDetails(correlationId, mobileNumber).getBody(), new CustomerDetailsDto());
         customerDetailsDto.setCardsDto(iCardsService.fetchCard(mobileNumber));
-        customerDetailsDto.setLoansDto(loansFeignClient.fetchLoan(mobileNumber).getBody());
+        customerDetailsDto.setLoansDto(loansFeignClient.fetchLoan(correlationId,mobileNumber).getBody());
 
         return customerDetailsDto;
     }

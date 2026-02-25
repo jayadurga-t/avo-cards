@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -32,6 +34,8 @@ import org.springframework.web.bind.annotation.*;
         description = "CRUD REST APIs in Avo Bank to CREATE, FETCH, UPDATE and DELETE card details"
 )
 public class CardsController {
+
+    private static final Logger logger = LoggerFactory.getLogger(CardsController.class);
 
     private final ICardsService iCardsService;
 
@@ -91,9 +95,12 @@ public class CardsController {
             )
     })
     @GetMapping("/fetch")
-    public ResponseEntity<CardsDto> fetchCard(@RequestParam
-                                                  @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
-                                                  String mobileNumber){
+    public ResponseEntity<CardsDto> fetchCard(@RequestHeader("avobank-correlation-id") String correlationId,
+                                              @RequestParam
+                                              @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+                                              String mobileNumber){
+
+        logger.debug("avobank-correlation-id found: {} ", correlationId);
         CardsDto cardsDto = iCardsService.fetchCard(mobileNumber);
 
         return ResponseEntity
